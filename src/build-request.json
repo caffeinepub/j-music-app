@@ -1,0 +1,131 @@
+{
+  "kind": "build_request",
+  "title": "Add amp-like controls, composer screen, piano-roll timeline, and audio file import to J Music App",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Add an in-app “amp-like” control panel (in the same app) that visually resembles a guitar amp section and provides real-time audio shaping controls for the guitar audio path (at minimum: input gain/drive, 3-band EQ, presence, and output/master).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "i need it like to be like an amplefire controls in this same app"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new UI panel exists with amp-style knobs/sliders and clearly labeled controls (English labels).",
+        "Adjusting controls changes the guitar sound in real time during playback (audible difference for drive/EQ/output).",
+        "Controls have sensible default values and a one-click reset to defaults is available.",
+        "The amp control UI is accessible within the existing studio experience (no separate app)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add a clear option/button in the UI to open the music-creation composer screen inside the same app, and implement navigation/state so users can enter and exit the composer without losing unsaved work unexpectedly.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "and this should allow me to creat my own song and compose music and it should show an optio to open this",
+          "The option to \"open this\" — should it open a music‑creation screen inside the same app"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A prominent action (e.g., “Open Composer”) is visible from the main app UI.",
+        "Clicking the action opens a dedicated composer screen/view inside the app.",
+        "Users can return to the previous screen via a clear “Back/Close” control.",
+        "If there are unsaved changes, the user is prompted before discarding them."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Implement a full visual music composer interface that supports a piano-roll style editor and timeline editing (multi-step grid with pitch rows and variable note lengths) for composing melodies.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "do you mean a full visual music composer (piano roll, virtual instruments, timeline editing)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The composer includes a piano-roll editor with a vertical pitch axis and a horizontal timeline axis.",
+        "Users can add, move, resize (duration), and delete notes using direct manipulation controls.",
+        "The timeline can be scrolled and/or zoomed to view more than the currently fixed 16-step range.",
+        "Playback in the app reflects the piano-roll notes (notes entered are heard at the correct times/pitches)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Support uploading/importing an existing audio file from the user’s device into the composer and make it usable during playback (at minimum: load, preview, and place it on the timeline or trigger it reliably).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "upload/import an existing audio file from the user’s device?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The composer provides an “Import Audio” action that opens a file picker.",
+        "Supported formats are clearly communicated in the UI and invalid files show an English error message.",
+        "After import, the user can preview the audio in-app.",
+        "The imported audio participates in playback in a deterministic way (e.g., placed on a track timeline region or triggered from steps).",
+        "The app enforces a reasonable max file size and shows an English warning when exceeded."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Ensure compositions saved/loaded through the existing composition manager continue to work with the new composer data (piano-roll/timeline data and any imported-audio references), including backward compatibility for previously saved compositions.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-3",
+          "msg-4"
+        ],
+        "quotes": [
+          "creat my own song and compose music",
+          "piano roll, virtual instruments, timeline editing",
+          "upload/import an existing audio file from the user’s device"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Existing saved compositions can still be loaded without errors.",
+        "New composer data is persisted when saving a composition and restored on load.",
+        "If a loaded composition lacks new fields, the app initializes them with safe defaults."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui (Shadcn components); compose them instead.",
+    "Do not edit frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, or frontend/src/main.tsx (immutable paths).",
+    "Backend must remain a single Motoko actor in backend/main.mo; add migration.mo only if an upgrade requires state migration."
+  ],
+  "nonGoals": [
+    "Implementing third-party authentication beyond Internet Identity.",
+    "Real-time collaboration/multiplayer composition editing.",
+    "Using external databases or external file storage/CDNs for uploaded audio."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

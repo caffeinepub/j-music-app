@@ -1,0 +1,167 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Amp-style controls + in-app composer (piano roll, timeline, and audio import) for J Music App",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Add an in-app amp-style control panel for the guitar audio path (drive, 3-band EQ, presence, master) with real-time audio shaping and reset.",
+      "acceptanceCriteria": [
+        "A new UI panel exists with amp-style knobs/sliders and clearly labeled controls (English labels).",
+        "Adjusting controls changes the guitar sound in real time during playback (audible difference for drive/EQ/output).",
+        "Controls have sensible default values and a one-click reset to defaults is available.",
+        "The amp control UI is accessible within the existing studio experience (no separate app)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/studio/AmpPanel.tsx",
+          "operation": "create",
+          "description": "Create an amp-like UI panel (amp faceplate styling, labeled knobs/sliders) to edit guitar amp parameters (input gain/drive, 3-band EQ, presence, output/master) and provide a one-click reset-to-defaults. Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+        },
+        {
+          "path": "frontend/src/audio/audioTypes.ts",
+          "operation": "modify",
+          "description": "Extend CompositionState with a guitar amp/effects settings object (defaults included) so amp parameters are part of app state and can be reset deterministically."
+        },
+        {
+          "path": "frontend/src/audio/useAudioEngine.ts",
+          "operation": "modify",
+          "description": "Update the Web Audio graph so the Guitar channel uses an amp-like processing chain (pre-gain/drive, EQ biquads, presence, post/master) and applies parameter updates in real time from composition state during playback."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the new AmpPanel into the existing studio layout (same app experience) and connect its controls to CompositionState updates for the guitar amp settings, including a reset action."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add an “Open Composer” action to enter/exit a dedicated in-app composer view while preventing unexpected loss of unsaved work (prompt before discarding).",
+      "acceptanceCriteria": [
+        "A prominent action (e.g., “Open Composer”) is visible from the main app UI.",
+        "Clicking the action opens a dedicated composer screen/view inside the app.",
+        "Users can return to the previous screen via a clear “Back/Close” control.",
+        "If there are unsaved changes, the user is prompted before discarding them."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/composer/ComposerScreen.tsx",
+          "operation": "create",
+          "description": "Create a dedicated ComposerScreen view component that can be shown/hidden within the app, includes a clear Back/Close control, and supports a discard-confirmation dialog when leaving with unsaved changes. Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add a prominent “Open Composer” action in the existing UI, implement navigation/state to toggle between Studio and ComposerScreen, and track a composer 'dirty' state with a snapshot to enable 'Discard changes' vs 'Keep changes' behavior without losing work unexpectedly."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Implement a piano-roll composer with timeline editing (scroll/zoom), direct manipulation note editing, and playback that reflects piano-roll notes at correct times/pitches.",
+      "acceptanceCriteria": [
+        "The composer includes a piano-roll editor with a vertical pitch axis and a horizontal timeline axis.",
+        "Users can add, move, resize (duration), and delete notes using direct manipulation controls.",
+        "The timeline can be scrolled and/or zoomed to view more than the currently fixed 16-step range.",
+        "Playback in the app reflects the piano-roll notes (notes entered are heard at the correct times/pitches)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/features/composer/PianoRoll.tsx",
+          "operation": "create",
+          "description": "Create a PianoRoll component with a vertical pitch axis and horizontal timeline grid that supports direct manipulation for add/move/resize/delete notes, plus scroll and zoom controls to view beyond 16 steps. Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+        },
+        {
+          "path": "frontend/src/audio/audioTypes.ts",
+          "operation": "modify",
+          "description": "Add new composer data types/fields to CompositionState for piano-roll notes (start position, duration, pitch, and target instrument/track) and timeline settings (e.g., loop length, zoom/scroll state defaults) while keeping existing 16-step data intact."
+        },
+        {
+          "path": "frontend/src/audio/useAudioEngine.ts",
+          "operation": "modify",
+          "description": "Enhance playback to support variable timeline length (beyond 16 steps) and to trigger piano-roll notes at the correct step/time with appropriate pitch, integrating them with the existing playback loop."
+        },
+        {
+          "path": "frontend/src/features/composer/ComposerScreen.tsx",
+          "operation": "modify",
+          "description": "Wire PianoRoll into ComposerScreen, connect editor interactions to CompositionState updates, and expose basic playback-related controls/indicators needed to validate that piano-roll notes are heard at correct times/pitches."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Ensure the same audio engine + composition state drives playback from both Studio and Composer views, and that any timeline length changes are respected by transport/playback behavior."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Allow importing an audio file in the composer with validation and size limits, preview it in-app, and make it participate deterministically in timeline playback.",
+      "acceptanceCriteria": [
+        "The composer provides an “Import Audio” action that opens a file picker.",
+        "Supported formats are clearly communicated in the UI and invalid files show an English error message.",
+        "After import, the user can preview the audio in-app.",
+        "The imported audio participates in playback in a deterministic way (e.g., placed on a track timeline region or triggered from steps).",
+        "The app enforces a reasonable max file size and shows an English warning when exceeded."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/audio/audioImport.ts",
+          "operation": "create",
+          "description": "Add frontend-only helpers for validating supported audio formats, enforcing a max file size, reading selected files into a serializable form for CompositionState (plus generating preview-ready object URLs), and producing English error/warning messages."
+        },
+        {
+          "path": "frontend/src/features/composer/AudioTrack.tsx",
+          "operation": "create",
+          "description": "Create an AudioTrack UI for the composer that provides an “Import Audio” action (file picker), shows supported formats, displays validation/size errors in English, enables in-app preview, and allows deterministic placement/triggering on the timeline (e.g., a region with a start step). Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+        },
+        {
+          "path": "frontend/src/audio/audioTypes.ts",
+          "operation": "modify",
+          "description": "Extend CompositionState with imported-audio metadata and timeline placement information (including serializable audio content or reference as required by the in-app save/load flow and nonGoals)."
+        },
+        {
+          "path": "frontend/src/features/composer/ComposerScreen.tsx",
+          "operation": "modify",
+          "description": "Wire AudioTrack into ComposerScreen and connect import/preview/placement state updates into CompositionState, marking the composer as having unsaved changes when edits occur."
+        },
+        {
+          "path": "frontend/src/audio/useAudioEngine.ts",
+          "operation": "modify",
+          "description": "Integrate imported audio into playback deterministically (e.g., scheduled to start at its placed timeline position and repeat/stop consistently with the transport), while honoring the app’s timeline/loop settings."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Maintain save/load compatibility via the existing composition manager by persisting new composer fields (piano roll + imported audio) and safely defaulting missing fields for older compositions.",
+      "acceptanceCriteria": [
+        "Existing saved compositions can still be loaded without errors.",
+        "New composer data is persisted when saving a composition and restored on load.",
+        "If a loaded composition lacks new fields, the app initializes them with safe defaults."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/audio/serializeComposition.ts",
+          "operation": "modify",
+          "description": "Update deserialization to be backward-compatible: when loading compositions missing new composer fields (piano-roll/timeline/imported-audio), initialize them with safe defaults; ensure serialization includes the new fields when present."
+        },
+        {
+          "path": "frontend/src/audio/audioTypes.ts",
+          "operation": "modify",
+          "description": "Align CompositionState typing with the persisted format by making new composer fields optional on input (load) but normalized to full defaults in-app after deserialization."
+        },
+        {
+          "path": "frontend/src/hooks/useCompositions.ts",
+          "operation": "modify",
+          "description": "Ensure save/load continues to use the updated serialization/deserialization so the existing composition manager persists/restores the new composer data without breaking older saved compositions."
+        },
+        {
+          "path": "frontend/src/features/studio/CompositionManager.tsx",
+          "operation": "modify",
+          "description": "If needed for UX clarity, adjust labels/help text so users understand that saving/loading includes the new composer data (without changing the underlying save/load flow). Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+        }
+      ]
+    }
+  ]
+}

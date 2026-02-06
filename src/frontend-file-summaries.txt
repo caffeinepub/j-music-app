@@ -1,0 +1,21 @@
+{
+  "frontend/src/App.tsx": "Main application component with studio/composer view toggle, amp controls, composition state management including guitar amp settings, piano roll notes, timeline length, and imported audio with unsaved changes detection and all required fields initialized.",
+  "frontend/src/audio/audioTypes.ts": "TypeScript type definitions for composition state with all new fields (guitarAmp, pianoRollNotes, timelineLength, importedAudio) as required non-optional properties for type safety.",
+  "frontend/src/audio/serializeComposition.ts": "Utility functions to serialize and deserialize composition state with backward compatibility defaults for new fields when loading older compositions.",
+  "frontend/src/audio/useAudioEngine.ts": "Audio engine hook managing Web Audio API with guitar amp processing chain (drive, 3-band EQ, presence, master), piano roll note playback, imported audio playback, and variable timeline length support.",
+  "frontend/src/features/auth/LoginButton.tsx": "Authentication button component that handles Internet Identity login/logout with proper query cache clearing.",
+  "frontend/src/features/studio/TransportBar.tsx": "Transport controls component with play/pause button and tempo slider for controlling playback.",
+  "frontend/src/features/studio/MixerPanel.tsx": "Mixer interface with per-channel volume faders, mute/solo buttons, and master volume control with hardware-inspired styling.",
+  "frontend/src/features/studio/InstrumentPanel.tsx": "Expanded instrument panel with tabs for drums, bass, synth, piano, guitar, and strings, each with 16-step sequencer grids and different note scales.",
+  "frontend/src/features/studio/CompositionManager.tsx": "Component for saving, loading, listing, and deleting compositions with updated help text indicating that new composer data is included in saves.",
+  "frontend/src/hooks/useCompositions.ts": "React Query hooks for composition CRUD operations with proper serialization/deserialization of new composer data fields.",
+  "frontend/src/hooks/useQueries.ts": "React Query hooks for user profile operations with proper loading state handling to prevent modal flash.",
+  "frontend/src/index.css": "Global styles with OKLCH color system using amber/orange accent colors for studio theme instead of blue/purple.",
+  "frontend/tailwind.config.js": "Tailwind configuration extended with 16-column grid for step sequencer and amber accent colors for studio aesthetic.",
+  "frontend/src/features/studio/YouTubePlayer.tsx": "YouTube player component that allows users to search for songs, paste YouTube URLs or video IDs, and play videos in an embedded iframe player.",
+  "frontend/src/features/studio/AmpPanel.tsx": "Guitar amp control panel component with six knobs (drive, bass, mid, treble, presence, master) featuring visual knob indicators and one-click reset to defaults.",
+  "frontend/src/features/composer/ComposerScreen.tsx": "Dedicated composer screen with tabbed interface for piano roll editor and audio import, includes playback controls and close button with unsaved changes handling.",
+  "frontend/src/features/composer/PianoRoll.tsx": "Piano roll editor component with vertical pitch axis, horizontal timeline, direct manipulation for adding/selecting/deleting notes, and zoom controls for timeline navigation.",
+  "frontend/src/features/composer/AudioTrack.tsx": "Audio import component with file picker, format/size validation, in-app preview, and timeline placement controls for imported audio files.",
+  "frontend/src/audio/audioImport.ts": "Helper functions for validating audio file formats and sizes, reading files as data URLs, and extracting audio duration metadata."
+}

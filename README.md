@@ -1,2 +1,3 @@
-# j-music-app
-Exported from Caffeine project: Add amp-like controls, composer screen, piano-roll timeline, and audio file import to J Music App
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`
