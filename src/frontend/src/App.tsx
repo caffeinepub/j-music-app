@@ -9,6 +9,8 @@ import CompositionManager from './features/studio/CompositionManager';
 import YouTubePlayer from './features/studio/YouTubePlayer';
 import AmpPanel from './features/studio/AmpPanel';
 import ComposerScreen from './features/composer/ComposerScreen';
+import VideoRecorderDialog from './features/recording/VideoRecorderDialog';
+import AudioRecorderDialog from './features/recording/AudioRecorderDialog';
 import { useAudioEngine } from './audio/useAudioEngine';
 import type { CompositionState } from './audio/audioTypes';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -16,7 +18,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Music2 } from 'lucide-react';
+import { Music2, Camera, Mic } from 'lucide-react';
 
 export default function App() {
   const { identity } = useInternetIdentity();
@@ -30,6 +32,8 @@ export default function App() {
   const [showComposer, setShowComposer] = useState(false);
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [composerSnapshot, setComposerSnapshot] = useState<CompositionState | null>(null);
+  const [showVideoRecorder, setShowVideoRecorder] = useState(false);
+  const [showAudioRecorder, setShowAudioRecorder] = useState(false);
 
   // Audio engine and composition state
   const [composition, setComposition] = useState<CompositionState>({
@@ -151,9 +155,11 @@ export default function App() {
         <header className="border-b border-white/10 bg-black/40 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-xl">
-                J
-              </div>
+              <img 
+                src="/assets/generated/app-logo.dim_512x512.png" 
+                alt="J Music App Logo" 
+                className="w-10 h-10 rounded-lg object-cover"
+              />
               <div>
                 <h1 className="text-2xl font-bold text-white">J Music App</h1>
                 <p className="text-xs text-gray-400">Studio Composer with YouTube</p>
@@ -173,9 +179,9 @@ export default function App() {
           {/* YouTube Player */}
           <YouTubePlayer />
 
-          {/* Transport Bar with Composer Button */}
-          <div className="flex gap-4 items-center">
-            <div className="flex-1">
+          {/* Transport Bar with Action Buttons */}
+          <div className="flex gap-4 items-center flex-wrap">
+            <div className="flex-1 min-w-[300px]">
               <TransportBar
                 isPlaying={audioEngine.isPlaying}
                 onPlayPause={audioEngine.togglePlayback}
@@ -183,13 +189,22 @@ export default function App() {
                 onTempoChange={(tempo) => setComposition({ ...composition, tempo })}
               />
             </div>
-            <Button
-              onClick={handleOpenComposer}
-              className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold px-6"
-            >
-              <Music2 className="w-5 h-5 mr-2" />
-              Open Composer
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setShowVideoRecorder(true)}
+                className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold px-6"
+              >
+                <Camera className="w-5 h-5 mr-2" />
+                Camera
+              </Button>
+              <Button
+                onClick={handleOpenComposer}
+                className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold px-6"
+              >
+                <Music2 className="w-5 h-5 mr-2" />
+                Composer
+              </Button>
+            </div>
           </div>
 
           {/* Studio Layout */}
@@ -253,18 +268,28 @@ export default function App() {
           )}
         </main>
 
-        {/* Footer */}
+        {/* Footer with Mic Button */}
         <footer className="border-t border-white/10 bg-black/40 backdrop-blur-sm py-4">
-          <div className="container mx-auto px-4 text-center text-sm text-gray-400">
-            © 2026. Built with ❤️ using{' '}
-            <a 
-              href="https://caffeine.ai" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-amber-500 hover:text-amber-400 transition-colors"
+          <div className="container mx-auto px-4 flex items-center justify-between">
+            <div className="text-sm text-gray-400">
+              © 2026. Built with ❤️ using{' '}
+              <a 
+                href="https://caffeine.ai" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-amber-500 hover:text-amber-400 transition-colors"
+              >
+                caffeine.ai
+              </a>
+            </div>
+            <Button
+              onClick={() => setShowAudioRecorder(true)}
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-full"
             >
-              caffeine.ai
-            </a>
+              <Mic className="w-5 h-5 mr-2" />
+              Audio Recorder
+            </Button>
           </div>
         </footer>
       </div>
@@ -299,6 +324,18 @@ export default function App() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Video Recorder Dialog */}
+      <VideoRecorderDialog 
+        open={showVideoRecorder} 
+        onOpenChange={setShowVideoRecorder}
+      />
+
+      {/* Audio Recorder Dialog */}
+      <AudioRecorderDialog 
+        open={showAudioRecorder} 
+        onOpenChange={setShowAudioRecorder}
+      />
     </div>
   );
 }

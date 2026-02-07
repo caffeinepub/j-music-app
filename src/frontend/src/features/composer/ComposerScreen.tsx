@@ -33,9 +33,11 @@ export default function ComposerScreen({
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-bold text-xl">
-                J
-              </div>
+              <img 
+                src="/assets/generated/app-logo.dim_512x512.png" 
+                alt="J Music App Logo" 
+                className="w-10 h-10 rounded-lg object-cover"
+              />
               <div>
                 <h1 className="text-xl font-bold text-white">Music Composer</h1>
                 <p className="text-xs text-gray-400">Advanced Timeline Editor</p>

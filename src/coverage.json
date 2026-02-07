@@ -1,125 +1,118 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T11:05:59.142Z",
+  "generatedAt": "2026-02-07T11:03:18.349Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 5,
-    "implemented": 5,
+    "total": 6,
+    "implemented": 6,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add an in-app “amp-like” control panel (in the same app) that visually resembles a guitar amp section and provides real-time audio shaping controls for the guitar audio path (at minimum: input gain/drive, 3-band EQ, presence, and output/master).",
+        "summary": "Add a prominent Camera option in the UI that, when clicked, requests camera permission and opens an in-app video recorder using the device camera.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/features/studio/AmpPanel.tsx",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/audio/useAudioEngine.ts",
+          "frontend/src/features/recording/VideoRecorderDialog.tsx",
+          "frontend/src/features/recording/useVideoRecording.ts",
           "frontend/src/App.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/features/studio/AmpPanel.tsx",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/audio/useAudioEngine.ts",
+          "frontend/src/features/recording/VideoRecorderDialog.tsx",
+          "frontend/src/features/recording/useVideoRecording.ts",
           "frontend/src/App.tsx"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Add a clear option/button in the UI to open the music-creation composer screen inside the same app, and implement navigation/state so users can enter and exit the composer without losing unsaved work unexpectedly.",
+        "summary": "Add multiple video recording options in the in-app video recorder (at minimum: front/back camera switch when available, resolution quality selector, and optional audio on/off toggle).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/features/composer/ComposerScreen.tsx",
-          "frontend/src/App.tsx"
+          "frontend/src/features/recording/VideoRecorderDialog.tsx",
+          "frontend/src/features/recording/useVideoRecording.ts"
         ],
         "matchedFiles": [
-          "frontend/src/features/composer/ComposerScreen.tsx",
-          "frontend/src/App.tsx"
+          "frontend/src/features/recording/VideoRecorderDialog.tsx",
+          "frontend/src/features/recording/useVideoRecording.ts"
         ]
       },
       {
         "id": "REQ-3",
-        "summary": "Implement a full visual music composer interface that supports a piano-roll style editor and timeline editing (multi-step grid with pitch rows and variable note lengths) for composing melodies.",
+        "summary": "Add a mic-type logo/icon at the end of the main page UI that, when clicked, opens an in-app audio recorder that records from the microphone and lets the user operate it (start/pause/stop).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/features/composer/PianoRoll.tsx",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/audio/useAudioEngine.ts",
-          "frontend/src/features/composer/ComposerScreen.tsx",
+          "frontend/src/features/recording/AudioRecorderDialog.tsx",
+          "frontend/src/features/recording/useAudioRecording.ts",
           "frontend/src/App.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/features/composer/PianoRoll.tsx",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/audio/useAudioEngine.ts",
-          "frontend/src/features/composer/ComposerScreen.tsx",
+          "frontend/src/features/recording/AudioRecorderDialog.tsx",
+          "frontend/src/features/recording/useAudioRecording.ts",
           "frontend/src/App.tsx"
         ]
       },
       {
         "id": "REQ-4",
-        "summary": "Support uploading/importing an existing audio file from the user’s device into the composer and make it usable during playback (at minimum: load, preview, and place it on the timeline or trigger it reliably).",
+        "summary": "Enable saving audio recordings as an MP3 file from the in-app audio recorder, with a download action after recording completes.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/audio/audioImport.ts",
-          "frontend/src/features/composer/AudioTrack.tsx",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/features/composer/ComposerScreen.tsx",
-          "frontend/src/audio/useAudioEngine.ts"
+          "frontend/src/features/recording/mp3Encode.ts",
+          "frontend/src/features/recording/useAudioRecording.ts",
+          "frontend/src/features/recording/AudioRecorderDialog.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/audio/audioImport.ts",
-          "frontend/src/features/composer/AudioTrack.tsx",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/features/composer/ComposerScreen.tsx",
-          "frontend/src/audio/useAudioEngine.ts"
+          "frontend/src/features/recording/useAudioRecording.ts",
+          "frontend/src/features/recording/AudioRecorderDialog.tsx"
         ]
       },
       {
         "id": "REQ-5",
-        "summary": "Ensure compositions saved/loaded through the existing composition manager continue to work with the new composer data (piano-roll/timeline data and any imported-audio references), including backward compatibility for previously saved compositions.",
+        "summary": "Replace the current letter-based header mark with the user’s logo image and ensure it appears in the header on all main screens.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/audio/serializeComposition.ts",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/hooks/useCompositions.ts",
-          "frontend/src/features/studio/CompositionManager.tsx"
+          "frontend/public/assets/generated/app-logo.dim_512x512.png",
+          "frontend/public/assets/generated/favicon.dim_32x32.png",
+          "frontend/src/App.tsx",
+          "frontend/src/features/composer/ComposerScreen.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/audio/serializeComposition.ts",
-          "frontend/src/audio/audioTypes.ts",
-          "frontend/src/features/studio/CompositionManager.tsx"
+          "frontend/public/assets/generated/app-logo.dim_512x512.png",
+          "frontend/public/assets/generated/favicon.dim_32x32.png",
+          "frontend/src/App.tsx",
+          "frontend/src/features/composer/ComposerScreen.tsx"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Make the site indexing-ready by adding basic SEO metadata to the HTML head (title, meta description, and Open Graph tags) using English text.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/index.html"
+        ],
+        "matchedFiles": [
+          "frontend/index.html"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/blob-storage/Mixin.mo",
-    "backend/blob-storage/Storage.mo",
-    "backend/main.mo",
-    "backend/migration.mo",
     "build-request.json",
     "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/index.html",
+    "frontend/public/assets/generated/app-logo.dim_512x512.png",
+    "frontend/public/assets/generated/favicon.dim_32x32.png",
     "frontend/src/App.tsx",
-    "frontend/src/audio/audioImport.ts",
-    "frontend/src/audio/audioTypes.ts",
-    "frontend/src/audio/serializeComposition.ts",
-    "frontend/src/audio/useAudioEngine.ts",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/features/composer/AudioTrack.tsx",
+    "frontend/src/camera/useCamera.ts",
     "frontend/src/features/composer/ComposerScreen.tsx",
-    "frontend/src/features/composer/PianoRoll.tsx",
-    "frontend/src/features/studio/AmpPanel.tsx",
-    "frontend/src/features/studio/CompositionManager.tsx",
+    "frontend/src/features/recording/AudioRecorderDialog.tsx",
+    "frontend/src/features/recording/VideoRecorderDialog.tsx",
+    "frontend/src/features/recording/useAudioRecording.ts",
+    "frontend/src/features/recording/useVideoRecording.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

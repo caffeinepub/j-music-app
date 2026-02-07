@@ -2,13 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-an-in-app-amp-like-control-panel-in-the-same-app-that-visually-resembles-a-guitar-amp-section-and-provides-real-time-audio-shaping-controls-for-the-guitar-audio-path-at-minimum-input-gain-drive-3-band-eq-presence-and-output-master",
-      "featureTitle": "Add an in-app “amp-like” control panel (in the same app) that visually resembles a guitar amp section and provides real-time audio shaping controls for the guitar audio path (at minimum: input gain/drive, 3-band EQ, presence, and output/master).",
+      "featureId": "feature-add-a-prominent-camera-option-in-the-ui-that-when-clicked-requests-camera-permission-and-opens-an-in-app-video-recorder-using-the-device-camera",
+      "featureTitle": "Add a prominent Camera option in the UI that, when clicked, requests camera permission and opens an in-app video recorder using the device camera.",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/audio/audioTypes.ts",
-        "frontend/src/audio/useAudioEngine.ts",
-        "frontend/src/features/studio/AmpPanel.tsx"
+        "frontend/src/features/recording/VideoRecorderDialog.tsx",
+        "frontend/src/features/recording/useVideoRecording.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -17,7 +16,8 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
+        "blob-storage@4.0.0",
+        "camera@1.0.0"
       ],
       "testIds": [
         "REQ-1"
@@ -25,11 +25,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-clear-option-button-in-the-ui-to-open-the-music-creation-composer-screen-inside-the-same-app-and-implement-navigation-state-so-users-can-enter-and-exit-the-composer-without-losing-unsaved-work-unexpectedly",
-      "featureTitle": "Add a clear option/button in the UI to open the music-creation composer screen inside the same app, and implement navigation/state so users can enter and exit the composer without losing unsaved work unexpectedly.",
+      "featureId": "feature-add-multiple-video-recording-options-in-the-in-app-video-recorder-at-minimum-front-back-camera-switch-when-available-resolution-quality-selector-and-optional-audio-on-off-toggle",
+      "featureTitle": "Add multiple video recording options in the in-app video recorder (at minimum: front/back camera switch when available, resolution quality selector, and optional audio on/off toggle).",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/features/composer/ComposerScreen.tsx"
+        "frontend/src/features/recording/VideoRecorderDialog.tsx",
+        "frontend/src/features/recording/useVideoRecording.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -38,7 +38,8 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
+        "blob-storage@4.0.0",
+        "camera@1.0.0"
       ],
       "testIds": [
         "REQ-2"
@@ -46,14 +47,12 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-a-full-visual-music-composer-interface-that-supports-a-piano-roll-style-editor-and-timeline-editing-multi-step-grid-with-pitch-rows-and-variable-note-lengths-for-composing-melodies",
-      "featureTitle": "Implement a full visual music composer interface that supports a piano-roll style editor and timeline editing (multi-step grid with pitch rows and variable note lengths) for composing melodies.",
+      "featureId": "feature-add-a-mic-type-logo-icon-at-the-end-of-the-main-page-ui-that-when-clicked-opens-an-in-app-audio-recorder-that-records-from-the-microphone-and-lets-the-user-operate-it-start-pause-stop",
+      "featureTitle": "Add a mic-type logo/icon at the end of the main page UI that, when clicked, opens an in-app audio recorder that records from the microphone and lets the user operate it (start/pause/stop).",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/audio/audioTypes.ts",
-        "frontend/src/audio/useAudioEngine.ts",
-        "frontend/src/features/composer/ComposerScreen.tsx",
-        "frontend/src/features/composer/PianoRoll.tsx"
+        "frontend/src/features/recording/AudioRecorderDialog.tsx",
+        "frontend/src/features/recording/useAudioRecording.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -62,7 +61,8 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
+        "blob-storage@4.0.0",
+        "camera@1.0.0"
       ],
       "testIds": [
         "REQ-3"
@@ -70,13 +70,32 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-support-uploading-importing-an-existing-audio-file-from-the-user-s-device-into-the-composer-and-make-it-usable-during-playback-at-minimum-load-preview-and-place-it-on-the-timeline-or-trigger-it-reliably",
-      "featureTitle": "Support uploading/importing an existing audio file from the user’s device into the composer and make it usable during playback (at minimum: load, preview, and place it on the timeline or trigger it reliably).",
+      "featureId": "feature-enable-saving-audio-recordings-as-an-mp3-file-from-the-in-app-audio-recorder-with-a-download-action-after-recording-completes",
+      "featureTitle": "Enable saving audio recordings as an MP3 file from the in-app audio recorder, with a download action after recording completes.",
       "files": [
-        "frontend/src/audio/audioImport.ts",
-        "frontend/src/audio/audioTypes.ts",
-        "frontend/src/audio/useAudioEngine.ts",
-        "frontend/src/features/composer/AudioTrack.tsx",
+        "frontend/src/features/recording/AudioRecorderDialog.tsx",
+        "frontend/src/features/recording/useAudioRecording.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0",
+        "camera@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-replace-the-current-letter-based-header-mark-with-the-user-s-logo-image-and-ensure-it-appears-in-the-header-on-all-main-screens",
+      "featureTitle": "Replace the current letter-based header mark with the user’s logo image and ensure it appears in the header on all main screens.",
+      "files": [
+        "frontend/src/App.tsx",
         "frontend/src/features/composer/ComposerScreen.tsx"
       ],
       "components": [
@@ -86,20 +105,19 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
+        "blob-storage@4.0.0",
+        "camera@1.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-5"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-compositions-saved-loaded-through-the-existing-composition-manager-continue-to-work-with-the-new-composer-data-piano-roll-timeline-data-and-any-imported-audio-references-including-backward-compatibility-for-previously-saved-compositions",
-      "featureTitle": "Ensure compositions saved/loaded through the existing composition manager continue to work with the new composer data (piano-roll/timeline data and any imported-audio references), including backward compatibility for previously saved compositions.",
+      "featureId": "feature-make-the-site-indexing-ready-by-adding-basic-seo-metadata-to-the-html-head-title-meta-description-and-open-graph-tags-using-english-text",
+      "featureTitle": "Make the site indexing-ready by adding basic SEO metadata to the HTML head (title, meta description, and Open Graph tags) using English text.",
       "files": [
-        "frontend/src/audio/audioTypes.ts",
-        "frontend/src/audio/serializeComposition.ts",
-        "frontend/src/features/studio/CompositionManager.tsx"
+        "frontend/index.html"
       ],
       "components": [
         "authorization@4.0.0",
@@ -108,10 +126,11 @@
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
         "github-export-icp-cli@1.0.0",
-        "blob-storage@4.0.0"
+        "blob-storage@4.0.0",
+        "camera@1.0.0"
       ],
       "testIds": [
-        "REQ-5"
+        "REQ-6"
       ],
       "confidence": "high"
     }

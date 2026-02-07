@@ -1,48 +1,61 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Building an app that includes amp-like controls and a full in-app music creation/composition feature (piano roll, virtual instruments, timeline editing) with the ability to open the composer and import audio files from the user’s device.",
-  "architectural_notes": [],
+  "summary": "Build a simple website with a custom/public URL that can be submitted to Google Search, featuring a high-quality in-app video recorder (camera button opens device camera for recording) and an in-app audio recorder (mic icon opens recorder to save recordings as MP3), and the site should include the user's logo.",
+  "architectural_notes": [
+    "UI requirement: camera button opens device camera to record video.",
+    "UI requirement: mic icon (at the bottom/last) opens audio recorder and allows saving as MP3.",
+    "Site should be Google indexable (submit URL to Google Search / Search Console)."
+  ],
   "known_issues": [],
   "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Modern music/recording brand logo with a clean mic + camera motif, warm amber/orange accent on dark background (app-logo.dim_512x512.png)\n- Square favicon version of the same logo, simplified for small sizes (favicon.dim_32x32.png)",
   "existing_features": [
     {
-      "id": "feature-add-an-in-app-amp-like-control-panel-in-the-same-app-that-visually-resembles-a-guitar-amp-section-and-provides-real-time-audio-shaping-controls-for-the-guitar-audio-path-at-minimum-input-gain-drive-3-band-eq-presence-and-output-master",
-      "title": "Add an in-app “amp-like” control panel (in the same app) that visually resembles a guitar amp section and provides real-time audio shaping controls for the guitar audio path (at minimum: input gain/drive, 3-band EQ, presence, and output/master).",
+      "id": "feature-add-a-prominent-camera-option-in-the-ui-that-when-clicked-requests-camera-permission-and-opens-an-in-app-video-recorder-using-the-device-camera",
+      "title": "Add a prominent Camera option in the UI that, when clicked, requests camera permission and opens an in-app video recorder using the device camera.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-add-a-clear-option-button-in-the-ui-to-open-the-music-creation-composer-screen-inside-the-same-app-and-implement-navigation-state-so-users-can-enter-and-exit-the-composer-without-losing-unsaved-work-unexpectedly",
-      "title": "Add a clear option/button in the UI to open the music-creation composer screen inside the same app, and implement navigation/state so users can enter and exit the composer without losing unsaved work unexpectedly.",
+      "id": "feature-add-multiple-video-recording-options-in-the-in-app-video-recorder-at-minimum-front-back-camera-switch-when-available-resolution-quality-selector-and-optional-audio-on-off-toggle",
+      "title": "Add multiple video recording options in the in-app video recorder (at minimum: front/back camera switch when available, resolution quality selector, and optional audio on/off toggle).",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-implement-a-full-visual-music-composer-interface-that-supports-a-piano-roll-style-editor-and-timeline-editing-multi-step-grid-with-pitch-rows-and-variable-note-lengths-for-composing-melodies",
-      "title": "Implement a full visual music composer interface that supports a piano-roll style editor and timeline editing (multi-step grid with pitch rows and variable note lengths) for composing melodies.",
+      "id": "feature-add-a-mic-type-logo-icon-at-the-end-of-the-main-page-ui-that-when-clicked-opens-an-in-app-audio-recorder-that-records-from-the-microphone-and-lets-the-user-operate-it-start-pause-stop",
+      "title": "Add a mic-type logo/icon at the end of the main page UI that, when clicked, opens an in-app audio recorder that records from the microphone and lets the user operate it (start/pause/stop).",
       "reqIds": [
         "REQ-3"
       ],
       "version": 1
     },
     {
-      "id": "feature-support-uploading-importing-an-existing-audio-file-from-the-user-s-device-into-the-composer-and-make-it-usable-during-playback-at-minimum-load-preview-and-place-it-on-the-timeline-or-trigger-it-reliably",
-      "title": "Support uploading/importing an existing audio file from the user’s device into the composer and make it usable during playback (at minimum: load, preview, and place it on the timeline or trigger it reliably).",
+      "id": "feature-enable-saving-audio-recordings-as-an-mp3-file-from-the-in-app-audio-recorder-with-a-download-action-after-recording-completes",
+      "title": "Enable saving audio recordings as an MP3 file from the in-app audio recorder, with a download action after recording completes.",
       "reqIds": [
         "REQ-4"
       ],
       "version": 1
     },
     {
-      "id": "feature-ensure-compositions-saved-loaded-through-the-existing-composition-manager-continue-to-work-with-the-new-composer-data-piano-roll-timeline-data-and-any-imported-audio-references-including-backward-compatibility-for-previously-saved-compositions",
-      "title": "Ensure compositions saved/loaded through the existing composition manager continue to work with the new composer data (piano-roll/timeline data and any imported-audio references), including backward compatibility for previously saved compositions.",
+      "id": "feature-replace-the-current-letter-based-header-mark-with-the-user-s-logo-image-and-ensure-it-appears-in-the-header-on-all-main-screens",
+      "title": "Replace the current letter-based header mark with the user’s logo image and ensure it appears in the header on all main screens.",
       "reqIds": [
         "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-site-indexing-ready-by-adding-basic-seo-metadata-to-the-html-head-title-meta-description-and-open-graph-tags-using-english-text",
+      "title": "Make the site indexing-ready by adding basic SEO metadata to the HTML head (title, meta description, and Open Graph tags) using English text.",
+      "reqIds": [
+        "REQ-6"
       ],
       "version": 1
     }
@@ -50,30 +63,31 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add amp-like (\"amplefire\") control UI/components within the app",
+      "summary": "Create a simple website with a public/custom URL that can be submitted to Google Search (indexing-ready).",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Add full visual music composer (piano roll, virtual instruments, timeline editing) inside the app",
+      "summary": "Add an in-app video recorder: a camera button that opens the phone camera to record video, with multiple recording options.",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-3",
-      "summary": "Provide an in-app option/button to open the music-creation/composer screen",
+      "summary": "Add an in-app audio recorder: a mic icon that opens an audio recorder and saves recordings as MP3.",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-4",
-      "summary": "Support uploading/importing existing audio files from the user’s device into the composer",
+      "summary": "Include the user's logo on the website page.",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Add amp-like controls, composer screen, piano-roll timeline, and audio file import to J Music App",
+  "gameProjectType": "none",
+  "projectName": "Add in-app camera video recorder and mic audio recorder (MP3) with logo and indexing-ready metadata",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

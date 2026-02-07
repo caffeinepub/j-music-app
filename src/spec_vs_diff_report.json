@@ -1,61 +1,70 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T11:05:59.139Z",
-  "summary": "Diff implements the requested in-app amp control panel with real-time WebAudio processing, adds an in-app composer screen with a piano-roll editor and audio import UI, updates audio engine/types/serialization for new composer fields, and updates backend storage schema with a migration for backward compatibility. Some additional unrelated UI/theming and feature expansions were also included.",
+  "generatedAt": "2026-02-07T11:03:18.346Z",
+  "summary": "Diff adds in-app video and audio recorder dialogs/hooks and SEO metadata in index.html, and replaces a header mark with a logo in ComposerScreen. However, requested front/back camera switching is not evidenced, required logo image assets are not present in the diff summary, and many unrelated studio/composer features appear to have been added beyond the BuildRequest.",
   "missing_requirements": [
     {
-      "id": "REQ-3",
-      "requirement": "Users can add, move, resize (duration), and delete notes using direct manipulation controls.",
-      "reason": "The provided PianoRoll implementation evidence clearly shows add/select/delete flows and zoom, but the diff summary does not show any implemented direct manipulation for moving notes or resizing note durations (e.g., drag to move, drag handles to resize, duration changes).",
+      "id": "REQ-2",
+      "requirement": "Support front/back camera switching when multiple cameras are available (before recording).",
+      "reason": "VideoRecorderDialog shows quality selection and an audio toggle, and useCamera is initialized with a fixed facingMode ('environment'), but the diff summary does not show any UI control or logic for switching between front/back cameras.",
       "evidence": [
-        "frontend/src/features/composer/PianoRoll.tsx (truncated)"
+        "frontend/src/features/recording/VideoRecorderDialog.tsx"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Use the provided/generated logo image (served from frontend static assets) in the header on all main screens (replacing the letter-based mark).",
+      "reason": "Only ComposerScreen explicitly shows an <img> pointing to /assets/generated/app-logo.dim_512x512.png; the diff summary does not provide evidence that the main/studio screen header mark was replaced everywhere (App.tsx is truncated). Also, the required logo image files themselves are not shown as added assets in the diff summary.",
+      "evidence": [
+        "frontend/src/features/composer/ComposerScreen.tsx",
+        "frontend/src/App.tsx"
+      ]
+    },
+    {
+      "requirement": "Add the required logo image files: app-logo.dim_512x512.png and favicon.dim_32x32.png.",
+      "reason": "index.html references /assets/generated/favicon.dim_32x32.png and ComposerScreen references /assets/generated/app-logo.dim_512x512.png, but the diff summary does not show these image assets being added.",
+      "evidence": [
+        "frontend/index.html",
+        "frontend/src/features/composer/ComposerScreen.tsx"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "YouTube search/URL/video ID player embedded in the studio UI.",
-      "reason": "BuildRequest does not request any YouTube player feature or related enhancements.",
+      "description": "Large expansion into a full music studio/composer app (mixer, instruments, amp processing chain, piano roll editor, audio import, composition serialization, YouTube player) beyond the requested camera/audio recorders, logo swap, and SEO metadata.",
+      "reason": "BuildRequest is narrowly about in-app camera/video recording, mic/audio recording with MP3 download, logo replacement, and basic SEO; the diff summary indicates many additional studio/composer features were modified/added.",
       "evidence": [
+        "frontend-file-summaries.txt",
+        "frontend/src/audio/useAudioEngine.ts",
         "frontend/src/features/studio/YouTubePlayer.tsx",
-        "frontend-file-summaries.txt"
+        "frontend/src/features/studio/AmpPanel.tsx",
+        "frontend/src/features/composer/PianoRoll.tsx",
+        "frontend/src/features/composer/AudioTrack.tsx",
+        "frontend/src/audio/serializeComposition.ts",
+        "frontend/src/audio/audioTypes.ts"
       ]
     },
     {
-      "description": "Broad studio UI theming/styling changes (OKLCH color system, amber/orange theme) and Tailwind configuration changes (e.g., extended grid).",
-      "reason": "BuildRequest focuses on amp controls, composer/piano-roll, audio import, and save/load compatibility; global theme and Tailwind grid changes are not requested.",
+      "description": "Global theme refactor to amber/orange accent colors and Tailwind grid extensions.",
+      "reason": "Not requested in the BuildRequest requirements; appears as extra styling/config work.",
       "evidence": [
+        "frontend-file-summaries.txt",
         "frontend/src/index.css",
-        "frontend/tailwind.config.js",
-        "frontend-file-summaries.txt"
-      ]
-    },
-    {
-      "description": "Expanded/modified instrument panel and mixer styling beyond the requested composer and amp panel additions.",
-      "reason": "BuildRequest does not ask to expand step-sequencer instruments or redesign the mixer; it only requires adding amp controls and a composer interface.",
-      "evidence": [
-        "frontend/src/features/studio/InstrumentPanel.tsx",
-        "frontend/src/features/studio/MixerPanel.tsx",
-        "frontend-file-summaries.txt"
+        "frontend/tailwind.config.js"
       ]
     }
   ],
-  "confidence": 0.68,
+  "confidence": 0.62,
   "changed_files": [
-    "backend/main.mo",
-    "backend/migration.mo",
     "frontend-file-summaries.txt",
+    "frontend/index.html",
     "frontend/src/App.tsx",
-    "frontend/src/audio/audioImport.ts",
-    "frontend/src/audio/audioTypes.ts",
-    "frontend/src/audio/serializeComposition.ts",
-    "frontend/src/audio/useAudioEngine.ts",
-    "frontend/src/features/composer/AudioTrack.tsx",
     "frontend/src/features/composer/ComposerScreen.tsx",
-    "frontend/src/features/composer/PianoRoll.tsx",
-    "frontend/src/features/studio/AmpPanel.tsx",
-    "frontend/src/features/studio/CompositionManager.tsx",
+    "frontend/src/features/recording/AudioRecorderDialog.tsx",
+    "frontend/src/features/recording/VideoRecorderDialog.tsx",
+    "frontend/src/features/recording/useAudioRecording.ts",
+    "frontend/src/features/recording/useVideoRecording.ts",
     "project_state.json"
   ]
 }

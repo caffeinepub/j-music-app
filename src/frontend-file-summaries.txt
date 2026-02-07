@@ -1,5 +1,5 @@
 {
-  "frontend/src/App.tsx": "Main application component with studio/composer view toggle, amp controls, composition state management including guitar amp settings, piano roll notes, timeline length, and imported audio with unsaved changes detection and all required fields initialized.",
+  "frontend/src/App.tsx": "Main application component with studio/composer view toggle, video and audio recorder dialogs, amp controls, composition state management, and recorder action buttons in header and footer.",
   "frontend/src/audio/audioTypes.ts": "TypeScript type definitions for composition state with all new fields (guitarAmp, pianoRollNotes, timelineLength, importedAudio) as required non-optional properties for type safety.",
   "frontend/src/audio/serializeComposition.ts": "Utility functions to serialize and deserialize composition state with backward compatibility defaults for new fields when loading older compositions.",
   "frontend/src/audio/useAudioEngine.ts": "Audio engine hook managing Web Audio API with guitar amp processing chain (drive, 3-band EQ, presence, master), piano roll note playback, imported audio playback, and variable timeline length support.",
@@ -14,8 +14,13 @@
   "frontend/tailwind.config.js": "Tailwind configuration extended with 16-column grid for step sequencer and amber accent colors for studio aesthetic.",
   "frontend/src/features/studio/YouTubePlayer.tsx": "YouTube player component that allows users to search for songs, paste YouTube URLs or video IDs, and play videos in an embedded iframe player.",
   "frontend/src/features/studio/AmpPanel.tsx": "Guitar amp control panel component with six knobs (drive, bass, mid, treble, presence, master) featuring visual knob indicators and one-click reset to defaults.",
-  "frontend/src/features/composer/ComposerScreen.tsx": "Dedicated composer screen with tabbed interface for piano roll editor and audio import, includes playback controls and close button with unsaved changes handling.",
+  "frontend/src/features/composer/ComposerScreen.tsx": "Dedicated composer screen with tabbed interface for piano roll editor and audio import, includes playback controls, close button with unsaved changes handling, and logo image in header.",
   "frontend/src/features/composer/PianoRoll.tsx": "Piano roll editor component with vertical pitch axis, horizontal timeline, direct manipulation for adding/selecting/deleting notes, and zoom controls for timeline navigation.",
   "frontend/src/features/composer/AudioTrack.tsx": "Audio import component with file picker, format/size validation, in-app preview, and timeline placement controls for imported audio files.",
-  "frontend/src/audio/audioImport.ts": "Helper functions for validating audio file formats and sizes, reading files as data URLs, and extracting audio duration metadata."
+  "frontend/src/audio/audioImport.ts": "Helper functions for validating audio file formats and sizes, reading files as data URLs, and extracting audio duration metadata.",
+  "frontend/src/features/recording/useVideoRecording.ts": "React hook that manages video recording using MediaRecorder API with support for audio track merging, recording state, duration tracking, and download functionality with proper error handling.",
+  "frontend/src/features/recording/VideoRecorderDialog.tsx": "Video recorder dialog component with live camera preview, recording controls (start/stop), quality presets, camera switching, audio toggle, playback preview, and download with comprehensive error handling and retry options.",
+  "frontend/src/features/recording/useAudioRecording.ts": "React hook that manages audio recording using MediaRecorder API with start/pause/resume/stop controls, duration tracking, MP3 conversion attempt with fallback, and download functionality with proper permission error handling.",
+  "frontend/src/features/recording/AudioRecorderDialog.tsx": "Audio recorder dialog component with microphone recording controls (start/pause/resume/stop), visual recording status, audio playback preview, MP3 download with fallback to original format, and comprehensive error handling with retry.",
+  "frontend/index.html": "HTML entry point with SEO metadata including title, description, Open Graph tags, and favicon link for search engine indexing."
 }

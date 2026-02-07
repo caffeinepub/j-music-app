@@ -1,165 +1,155 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Amp-style controls + in-app composer (piano roll, timeline, and audio import) for J Music App",
+  "title": "In-app camera video recorder + mic audio recorder (MP3), logo swap, and SEO metadata",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Add an in-app amp-style control panel for the guitar audio path (drive, 3-band EQ, presence, master) with real-time audio shaping and reset.",
+      "summary": "Add a prominent Camera button on the main page that opens an in-app video recorder with live preview, recording controls, playback, and download, with safe error handling.",
       "acceptanceCriteria": [
-        "A new UI panel exists with amp-style knobs/sliders and clearly labeled controls (English labels).",
-        "Adjusting controls changes the guitar sound in real time during playback (audible difference for drive/EQ/output).",
-        "Controls have sensible default values and a one-click reset to defaults is available.",
-        "The amp control UI is accessible within the existing studio experience (no separate app)."
+        "A clearly labeled Camera button is visible on the main page.",
+        "Clicking Camera triggers the browser permission prompt (when needed) and shows a live camera preview in-app.",
+        "The video recorder supports start/stop recording and shows a playback preview after stopping.",
+        "The user can download/save the recorded video file from the app.",
+        "If the user denies permission or the device has no camera, the UI shows an English error message and a safe retry option."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/features/studio/AmpPanel.tsx",
+          "path": "frontend/src/features/recording/VideoRecorderDialog.tsx",
           "operation": "create",
-          "description": "Create an amp-like UI panel (amp faceplate styling, labeled knobs/sliders) to edit guitar amp parameters (input gain/drive, 3-band EQ, presence, output/master) and provide a one-click reset-to-defaults. Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+          "description": "Create an in-app video recorder dialog: shows a stable-sized live preview, Start/Stop recording controls, playback preview after stopping, and a Download action; handle permission denial/not-found/not-supported with English messages and a Retry action. Use the selected camera component hook (useCamera from the camera component) to power preview/start/stop/switch behavior; verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/audio/audioTypes.ts",
-          "operation": "modify",
-          "description": "Extend CompositionState with a guitar amp/effects settings object (defaults included) so amp parameters are part of app state and can be reset deterministically."
-        },
-        {
-          "path": "frontend/src/audio/useAudioEngine.ts",
-          "operation": "modify",
-          "description": "Update the Web Audio graph so the Guitar channel uses an amp-like processing chain (pre-gain/drive, EQ biquads, presence, post/master) and applies parameter updates in real time from composition state during playback."
+          "path": "frontend/src/features/recording/useVideoRecording.ts",
+          "operation": "create",
+          "description": "Create a React hook that uses in-browser MediaRecorder on the active camera preview stream (derived from the preview video element's srcObject) to implement start/stop recording, produce a Blob + object URL, and expose download-ready metadata (filename, mimeType). Ensure all recording actions are user-gesture initiated and errors are surfaced as English strings."
         },
         {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Wire the new AmpPanel into the existing studio layout (same app experience) and connect its controls to CompositionState updates for the guitar amp settings, including a reset action."
+          "description": "Wire a prominent Camera button into the existing main page layout (near existing primary actions) and open the VideoRecorderDialog from a user click; ensure the dialog is reachable with no new top-level routes and that error states provide safe retry."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Add an “Open Composer” action to enter/exit a dedicated in-app composer view while preventing unexpected loss of unsaved work (prompt before discarding).",
+      "summary": "Add camera recorder options: front/back switch (when available), quality preset selection, and optional mic audio toggle, all applied safely before recording.",
       "acceptanceCriteria": [
-        "A prominent action (e.g., “Open Composer”) is visible from the main app UI.",
-        "Clicking the action opens a dedicated composer screen/view inside the app.",
-        "Users can return to the previous screen via a clear “Back/Close” control.",
-        "If there are unsaved changes, the user is prompted before discarding them."
+        "When multiple cameras are available, the user can switch between front/back cameras before recording.",
+        "The user can choose a recording quality preset (e.g., High/Medium/Low) before recording; the app applies corresponding media constraints.",
+        "The user can enable/disable microphone audio capture for video recording before recording begins.",
+        "Unsupported options are disabled gracefully with a short English hint (no crashes)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/features/composer/ComposerScreen.tsx",
-          "operation": "create",
-          "description": "Create a dedicated ComposerScreen view component that can be shown/hidden within the app, includes a clear Back/Close control, and supports a discard-confirmation dialog when leaving with unsaved changes. Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+          "path": "frontend/src/features/recording/VideoRecorderDialog.tsx",
+          "operation": "modify",
+          "description": "Add recorder options UI: (1) front/back camera toggle using the camera component's switching capability when supported, (2) quality preset selector mapped to media constraints (ideal width/height), and (3) audio on/off toggle to include/exclude microphone capture for video recording. Disable unsupported controls with a short English hint. Use the selected camera component hook (useCamera) for preview and switching; verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/features/recording/useVideoRecording.ts",
           "operation": "modify",
-          "description": "Add a prominent “Open Composer” action in the existing UI, implement navigation/state to toggle between Studio and ComposerScreen, and track a composer 'dirty' state with a snapshot to enable 'Discard changes' vs 'Keep changes' behavior without losing work unexpectedly."
+          "description": "Apply chosen options before recording begins: restart camera preview when quality or facing mode changes; when audio is enabled, request microphone capture at recording start and merge audio track with the preview video track for MediaRecorder; if mic capture is unavailable/denied, show an English hint and continue with silent video (no crash)."
         }
       ]
     },
     {
       "id": "REQ-3",
-      "summary": "Implement a piano-roll composer with timeline editing (scroll/zoom), direct manipulation note editing, and playback that reflects piano-roll notes at correct times/pitches.",
+      "summary": "Add a mic icon button at the end of the main page that opens an in-app microphone audio recorder with start/pause/resume/stop and safe permission error handling.",
       "acceptanceCriteria": [
-        "The composer includes a piano-roll editor with a vertical pitch axis and a horizontal timeline axis.",
-        "Users can add, move, resize (duration), and delete notes using direct manipulation controls.",
-        "The timeline can be scrolled and/or zoomed to view more than the currently fixed 16-step range.",
-        "Playback in the app reflects the piano-roll notes (notes entered are heard at the correct times/pitches)."
+        "A mic icon button is visible at the bottom/end of the main page layout.",
+        "Clicking the mic icon requests microphone permission (when needed) and opens an audio recorder UI.",
+        "The audio recorder supports start, pause/resume, and stop.",
+        "If the user denies permission or the device has no microphone, the UI shows an English error message and a safe retry option."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/features/composer/PianoRoll.tsx",
+          "path": "frontend/src/features/recording/AudioRecorderDialog.tsx",
           "operation": "create",
-          "description": "Create a PianoRoll component with a vertical pitch axis and horizontal timeline grid that supports direct manipulation for add/move/resize/delete notes, plus scroll and zoom controls to view beyond 16 steps. Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+          "description": "Create an in-app audio recorder dialog opened from a mic icon button: Start, Pause/Resume, Stop; show recording status and duration; handle permission denial/not-found/not-supported with English messages and a Retry action."
         },
         {
-          "path": "frontend/src/audio/audioTypes.ts",
-          "operation": "modify",
-          "description": "Add new composer data types/fields to CompositionState for piano-roll notes (start position, duration, pitch, and target instrument/track) and timeline settings (e.g., loop length, zoom/scroll state defaults) while keeping existing 16-step data intact."
-        },
-        {
-          "path": "frontend/src/audio/useAudioEngine.ts",
-          "operation": "modify",
-          "description": "Enhance playback to support variable timeline length (beyond 16 steps) and to trigger piano-roll notes at the correct step/time with appropriate pitch, integrating them with the existing playback loop."
-        },
-        {
-          "path": "frontend/src/features/composer/ComposerScreen.tsx",
-          "operation": "modify",
-          "description": "Wire PianoRoll into ComposerScreen, connect editor interactions to CompositionState updates, and expose basic playback-related controls/indicators needed to validate that piano-roll notes are heard at correct times/pitches."
+          "path": "frontend/src/features/recording/useAudioRecording.ts",
+          "operation": "create",
+          "description": "Create a React hook that uses MediaDevices + MediaRecorder for microphone recording with start/pause/resume/stop; retains the original recorded audio blob so it is never lost if later conversion fails; expose state and English error messages. Keep all permission/recording actions user-gesture initiated."
         },
         {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Ensure the same audio engine + composition state drives playback from both Studio and Composer views, and that any timeline length changes are respected by transport/playback behavior."
+          "description": "Add a mic icon button at the bottom/end of the main page layout and wire it to open AudioRecorderDialog."
         }
       ]
     },
     {
       "id": "REQ-4",
-      "summary": "Allow importing an audio file in the composer with validation and size limits, preview it in-app, and make it participate deterministically in timeline playback.",
+      "summary": "Enable saving audio recordings as MP3 with a download action after completion, with graceful fallback if MP3 encoding fails.",
       "acceptanceCriteria": [
-        "The composer provides an “Import Audio” action that opens a file picker.",
-        "Supported formats are clearly communicated in the UI and invalid files show an English error message.",
-        "After import, the user can preview the audio in-app.",
-        "The imported audio participates in playback in a deterministic way (e.g., placed on a track timeline region or triggered from steps).",
-        "The app enforces a reasonable max file size and shows an English warning when exceeded."
+        "After stopping an audio recording, the app provides a Download button that saves the recording as an .mp3 file.",
+        "The downloaded file has MIME/type and filename consistent with MP3 (e.g., audio/mpeg, *.mp3).",
+        "If MP3 encoding fails on the device/browser, the UI shows an English error message and does not lose the recorded audio; it offers an alternative download format if implemented."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/audio/audioImport.ts",
+          "path": "frontend/src/features/recording/mp3Encode.ts",
           "operation": "create",
-          "description": "Add frontend-only helpers for validating supported audio formats, enforcing a max file size, reading selected files into a serializable form for CompositionState (plus generating preview-ready object URLs), and producing English error/warning messages."
+          "description": "Implement client-side MP3 encoding helper that converts recorded audio into MP3 bytes (audio/mpeg) for download; if encoding fails, return a structured error while preserving access to the original recording for fallback download."
         },
         {
-          "path": "frontend/src/features/composer/AudioTrack.tsx",
-          "operation": "create",
-          "description": "Create an AudioTrack UI for the composer that provides an “Import Audio” action (file picker), shows supported formats, displays validation/size errors in English, enables in-app preview, and allows deterministic placement/triggering on the timeline (e.g., a region with a start step). Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
-        },
-        {
-          "path": "frontend/src/audio/audioTypes.ts",
+          "path": "frontend/src/features/recording/useAudioRecording.ts",
           "operation": "modify",
-          "description": "Extend CompositionState with imported-audio metadata and timeline placement information (including serializable audio content or reference as required by the in-app save/load flow and nonGoals)."
+          "description": "Add post-stop flow to generate an MP3 blob via mp3Encode.ts and expose a primary Download MP3 action (audio/mpeg, .mp3). If MP3 encoding fails, surface an English error and keep the original recording available for an alternative download format (e.g., the original MediaRecorder blob) without losing audio."
         },
         {
-          "path": "frontend/src/features/composer/ComposerScreen.tsx",
+          "path": "frontend/src/features/recording/AudioRecorderDialog.tsx",
           "operation": "modify",
-          "description": "Wire AudioTrack into ComposerScreen and connect import/preview/placement state updates into CompositionState, marking the composer as having unsaved changes when edits occur."
-        },
-        {
-          "path": "frontend/src/audio/useAudioEngine.ts",
-          "operation": "modify",
-          "description": "Integrate imported audio into playback deterministically (e.g., scheduled to start at its placed timeline position and repeat/stop consistently with the transport), while honoring the app’s timeline/loop settings."
+          "description": "Add Download MP3 button after stop that saves the encoded .mp3; if MP3 encoding fails, show an English error and present a fallback download action for the preserved original recording."
         }
       ]
     },
     {
       "id": "REQ-5",
-      "summary": "Maintain save/load compatibility via the existing composition manager by persisting new composer fields (piano roll + imported audio) and safely defaulting missing fields for older compositions.",
+      "summary": "Replace the letter-based header mark with the provided logo image across all main screens (including the composer screen) served as a static frontend asset.",
       "acceptanceCriteria": [
-        "Existing saved compositions can still be loaded without errors.",
-        "New composer data is persisted when saving a composition and restored on load.",
-        "If a loaded composition lacks new fields, the app initializes them with safe defaults."
+        "The header displays the provided/generated logo image instead of the single-letter placeholder.",
+        "The logo renders crisply on mobile and desktop and has appropriate alt text in English.",
+        "The logo asset is served from frontend static assets (not fetched from the backend)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/audio/serializeComposition.ts",
-          "operation": "modify",
-          "description": "Update deserialization to be backward-compatible: when loading compositions missing new composer fields (piano-roll/timeline/imported-audio), initialize them with safe defaults; ensure serialization includes the new fields when present."
+          "path": "frontend/public/assets/generated/app-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated logo image asset at frontend/public/assets/generated/app-logo.dim_512x512.png and ensure it is referenced as a static asset in the UI."
         },
         {
-          "path": "frontend/src/audio/audioTypes.ts",
-          "operation": "modify",
-          "description": "Align CompositionState typing with the persisted format by making new composer fields optional on input (load) but normalized to full defaults in-app after deserialization."
+          "path": "frontend/public/assets/generated/favicon.dim_32x32.png",
+          "operation": "create",
+          "description": "Add the generated favicon asset at frontend/public/assets/generated/favicon.dim_32x32.png for use in the HTML head."
         },
         {
-          "path": "frontend/src/hooks/useCompositions.ts",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Ensure save/load continues to use the updated serialization/deserialization so the existing composition manager persists/restores the new composer data without breaking older saved compositions."
+          "description": "Replace the current letter-based header mark with the static logo image (frontend/public/assets/generated/app-logo.dim_512x512.png), including English alt text; ensure sizing remains crisp and responsive."
         },
         {
-          "path": "frontend/src/features/studio/CompositionManager.tsx",
+          "path": "frontend/src/features/composer/ComposerScreen.tsx",
           "operation": "modify",
-          "description": "If needed for UX clarity, adjust labels/help text so users understand that saving/loading includes the new composer data (without changing the underlying save/load flow). Compose existing shadcn/ui primitives (do not edit frontend/src/components/ui)."
+          "description": "Replace the composer screen header letter mark with the same static logo image (frontend/public/assets/generated/app-logo.dim_512x512.png) and English alt text so it appears on all main screens."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Add basic SEO and Open Graph metadata in English to make the site indexing-ready.",
+      "acceptanceCriteria": [
+        "The app’s HTML head includes a descriptive <title> and a meta description in English.",
+        "Open Graph tags (og:title, og:description) are present in English.",
+        "No user-facing text added by this change uses non-English language."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Update the HTML head with an English <title>, meta description, and Open Graph tags (og:title, og:description). Add a favicon link pointing to frontend/public/assets/generated/favicon.dim_32x32.png."
         }
       ]
     }
